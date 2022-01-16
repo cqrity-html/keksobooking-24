@@ -33,10 +33,7 @@ function createIdGenerator() {
 
   return function () {
     lastGeneratedId += 1;
-    if (lastGeneratedId === 10) {
-      return lastGeneratedId;
-    }
-    return `0${lastGeneratedId}`;
+    return lastGeneratedId === 10 ? lastGeneratedId : `0${lastGeneratedId}`;
   };
 }
 

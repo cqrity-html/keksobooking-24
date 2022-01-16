@@ -25,7 +25,7 @@ function createOffer() {
       title: 'Заголовок предложения.',
       address: '',
       price: getRandomPositiveInteger(6000, 60000),
-      type: OFFER_TYPES[getRandomPositiveInteger(0, OFFER_TYPES.length + 1)],
+      type: OFFER_TYPES[getRandomPositiveInteger(0, OFFER_TYPES.length - 1)],
       rooms: getRandomPositiveInteger(1, 3),
       guests: getRandomPositiveInteger(0, 2),
       checkin: CHECK_TIMES[getRandomPositiveInteger(0, CHECK_TIMES.length - 1)],
@@ -40,4 +40,4 @@ function createOffer() {
 }
 
 const offers = Array.from({ length: OFFERS_QUANTITY }, createOffer);
-console.log(offers);
+export { offers };
