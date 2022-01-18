@@ -31,16 +31,16 @@ function createOffer() {
       avatar: `img/avatars/user${generatePhotoId()}.png`,
     },
     location: {
-      lat: getRandomPositiveFloat(35.65000, 35.70000),
-      lng: getRandomPositiveFloat(139.70000, 139.80000),
+      lat: getRandomPositiveFloat(35.65000, 35.70000, 5),
+      lng: getRandomPositiveFloat(139.70000, 139.80000, 5),
     },
     offer: {
       title: OFFER_TITLES[getRandomPositiveInteger(0, OFFER_TITLES.length - 1)],
       address: '',
-      price: getRandomPositiveInteger(6000, 60000),
+      price: getRandomPositiveInteger(0, 60000),
       type: OFFER_TYPES[getRandomPositiveInteger(0, OFFER_TYPES.length - 1)],
       rooms: getRandomPositiveInteger(1, 3),
-      guests: getRandomPositiveInteger(0, 2),
+      guests: getRandomPositiveInteger(0, 3),
       checkin: CHECK_TIMES[getRandomPositiveInteger(0, CHECK_TIMES.length - 1)],
       checkout: CHECK_TIMES[getRandomPositiveInteger(0, CHECK_TIMES.length - 1)],
       features: FEATURES.slice(0, getRandomPositiveInteger(1, 6)),
@@ -53,4 +53,5 @@ function createOffer() {
 }
 
 const offers = Array.from({ length: OFFERS_QUANTITY }, createOffer);
+
 export { offers };

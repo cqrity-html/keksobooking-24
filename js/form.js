@@ -23,22 +23,7 @@ const adFormCapacity = adForm.querySelector('#capacity');
 const adFormTimeIn = adForm.querySelector('#timein');
 const adFormTimeOut = adForm.querySelector('#timeout');
 const adFormType = adForm.querySelector('#type');
-
-const inactiveState = () => {
-  adForm.classList.add('ad-form--disabled');
-  adFormFieldsets.forEach((fieldset) => fieldset.setAttribute('disabled', 'disabled'));
-  mapFilters.classList.add('map__filters--disabled');
-  mapFiltersFieldsets.forEach((fieldset) => fieldset.setAttribute('disabled', 'disabled'));
-  mapFiltersSelects.forEach((select) => select.setAttribute('disabled', 'disabled'));
-};
-
-const activeState = () => {
-  adForm.classList.remove('ad-form--disabled');
-  adFormFieldsets.forEach((fieldset) => fieldset.removeAttribute('disabled'));
-  mapFilters.classList.remove('map__filters--disabled');
-  mapFiltersFieldsets.forEach((fieldset) => fieldset.removeAttribute('disabled'));
-  mapFiltersSelects.forEach((select) => select.removeAttribute('disabled'));
-};
+const adFormAddress = adForm.querySelector('#address');
 
 const onTitleInput = () => {
   const valueLength = adFormTitle.value.length;
@@ -59,6 +44,7 @@ const createNonCapacityOption = (index) => {
   newOption.value = index;
   newOption.textContent = 'не для гостей';
   adFormCapacity.appendChild(newOption);
+  adFormCapacity.disabled = true;
 };
 
 const createCapacityList = (index) => {
@@ -66,6 +52,7 @@ const createCapacityList = (index) => {
     const newOption = document.createElement('option');
     newOption.value = i;
     newOption.textContent = `для ${i} ${i === 1 ? 'гостя' : 'гостей'}`;
+    adFormCapacity.disabled = false;
     adFormCapacity.appendChild(newOption);
   }
 };
@@ -91,15 +78,13 @@ const onPriceInput = () => {
   adFormPrice.reportValidity();
 };
 
-const onTypeInput = () => {
+const onTypeChange = () => {
   const currentType = adFormType.value;
   minPrice = offerMinPrices[currentType];
   adFormPrice.placeholder = minPrice;
 };
 
-adFormType.addEventListener('change', onTypeInput);
-
-adFormRoomNumber.addEventListener('change', () => {
+const onRoomAndGuestsChange = () => {
   const roomNumberValue = adFormRoomNumber.value;
   if (roomNumberValue === '100') {
     adFormCapacity.innerHTML = '';
@@ -109,11 +94,45 @@ adFormRoomNumber.addEventListener('change', () => {
     createCapacityList(roomNumberValue);
   }
   adFormRoomNumber.reportValidity();
-});
+};
 
-adFormTimeIn.addEventListener('change', onTimeChange);
-adFormTimeOut.addEventListener('change', onTimeChange);
-adFormTitle.addEventListener('input', onTitleInput);
-adFormPrice.addEventListener('input', onPriceInput);
+const onAddressInput = () => {
+  adFormAddress.setCustomValidity('В это поле ничего вводить нельзя, удалите всё введёное пожалуйста!');
+  adFormAddress.reportValidity();
+};
 
-export { inactiveState, activeState };
+const inactiveState = () => {
+  adForm.classList.add('ad-form--disabled');
+  adFormFieldsets.forEach((fieldset) => fieldset.setAttribute('disabled', 'disabled'));
+  mapFilters.classList.add('map__filters--disabled');
+  mapFiltersFieldsets.forEach((fieldset) => fieldset.setAttribute('disabled', 'disabled'));
+  mapFiltersSelects.forEach((select) => select.setAttribute('disabled', 'disabled'));
+
+  adFormAddress.removeEventListener('input', onAddressInput);
+  adFormType.removeEventListener('change', onTypeChange);
+  adFormRoomNumber.removeEventListener('change', onRoomAndGuestsChange);
+  adFormTimeIn.removeEventListener('change', onTimeChange);
+  adFormTimeOut.removeEventListener('change', onTimeChange);
+  adFormTitle.removeEventListener('input', onTitleInput);
+  adFormPrice.removeEventListener('input', onPriceInput);
+};
+
+const activeState = () => {
+  adForm.classList.remove('ad-form--disabled');
+  adFormFieldsets.forEach((fieldset) => fieldset.removeAttribute('disabled'));
+  mapFilters.classList.remove('map__filters--disabled');
+  mapFiltersFieldsets.forEach((fieldset) => fieldset.removeAttribute('disabled'));
+  mapFiltersSelects.forEach((select) => select.removeAttribute('disabled'));
+
+  adFormAddress.addEventListener('input', onAddressInput);
+  adFormType.addEventListener('change', onTypeChange);
+  adFormRoomNumber.addEventListener('change', onRoomAndGuestsChange);
+  adFormTimeIn.addEventListener('change', onTimeChange);
+  adFormTimeOut.addEventListener('change', onTimeChange);
+  adFormTitle.addEventListener('input', onTitleInput);
+  adFormPrice.addEventListener('input', onPriceInput);
+};
+
+inactiveState();
+
+export { inactiveState, activeState, adFormAddress };

@@ -1,8 +1,6 @@
-import './cards.js';
 import './db.js';
 import './form.js';
+import './map.js';
+import './popup.js';
 import './temp_data.js';
 import './utils.js';
-//import { inactiveState } from './form.js';
-
-//inactiveState();

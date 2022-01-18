@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="leaflet/leaflet.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Кексобукинг</title>
 </head>
@@ -19,7 +20,7 @@
     <section class="map">
 
       <!-- Блок для вставки карты -->
-      <div class="map__canvas" id="map-canvas"></div>
+      <div class="map__canvas" id="map"></div>
 
       <!-- Фильтрация объявлений -->
       <div class="map__filters-container">
@@ -133,11 +134,6 @@
           <label class="ad-form__label" for="capacity">Количество мест</label>
           <select id="capacity" name="capacity">
             <option value="1" selected>для 1 гостя</option>
-            <!--
-            <option value="2">для 2 гостей</option>
-            <option value="3">для 3 гостей</option>
-            <option value="0">не для гостей</option>
-            -->
           </select>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide features">
@@ -231,6 +227,9 @@
       <button type="button" class="error__button">Попробовать снова</button>
     </div>
   </template>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+  crossorigin=""></script>
   <script src="js/main.js" type="module"></script>
 </body>
 </html>
