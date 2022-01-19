@@ -1,3 +1,5 @@
+import { sendData } from './api.js';
+
 const TITLE_MIN_LENGTH = 30;
 const TITLE_MAX_LENGTH = 100;
 const PRICE_MAX = 1000000;
@@ -24,6 +26,7 @@ const adFormTimeIn = adForm.querySelector('#timein');
 const adFormTimeOut = adForm.querySelector('#timeout');
 const adFormType = adForm.querySelector('#type');
 const adFormAddress = adForm.querySelector('#address');
+const resetButton = document.querySelector('.ad-form__reset');
 
 const onTitleInput = () => {
   const valueLength = adFormTitle.value.length;
@@ -115,7 +118,12 @@ const inactiveState = () => {
   adFormTimeOut.removeEventListener('change', onTimeChange);
   adFormTitle.removeEventListener('input', onTitleInput);
   adFormPrice.removeEventListener('input', onPriceInput);
+  resetButton.removeEventListener('click', () => {
+    adForm.reset();
+  });
 };
+
+inactiveState();
 
 const activeState = () => {
   adForm.classList.remove('ad-form--disabled');
@@ -131,8 +139,21 @@ const activeState = () => {
   adFormTimeOut.addEventListener('change', onTimeChange);
   adFormTitle.addEventListener('input', onTitleInput);
   adFormPrice.addEventListener('input', onPriceInput);
+  resetButton.addEventListener('click', () => {
+    adForm.reset();
+  });
 };
 
-inactiveState();
+const setUserFormSubmit = (onSuccess, onFail) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
 
-export { inactiveState, activeState, adFormAddress };
+    sendData(
+      () => onSuccess(),
+      () => onFail(),
+      new FormData(evt.target),
+    );
+  });
+};
+
+export { inactiveState, activeState, adFormAddress, setUserFormSubmit, adForm, resetButton };

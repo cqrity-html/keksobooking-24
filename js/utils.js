@@ -37,4 +37,6 @@ function createIdGenerator() {
   };
 }
 
-export { getRandomPositiveInteger, getRandomPositiveFloat, createRandomIdFromRangeGenerator, createIdGenerator };
+const isEscapeKey = (evt) => evt.key === 'Esc' || evt.key === 'Escape';
+
+export { getRandomPositiveInteger, getRandomPositiveFloat, createRandomIdFromRangeGenerator, createIdGenerator, isEscapeKey };

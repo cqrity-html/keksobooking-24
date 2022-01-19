@@ -52,6 +52,6 @@ function createOffer() {
   return offerObj;
 }
 
-const offers = Array.from({ length: OFFERS_QUANTITY }, createOffer);
+const tempData = Array.from({ length: OFFERS_QUANTITY }, createOffer);
 
-export { offers };
+export { tempData };
