@@ -18,7 +18,7 @@ L.tileLayer(
 ).addTo(map);
 
 const mainMarkerIcon = L.icon({
-  iconUrl: '../img/main-pin.svg',
+  iconUrl: '../img/muffin-grey.svg',
   iconSize: [52, 52],
   iconAnchor: [26, 52],
 });
