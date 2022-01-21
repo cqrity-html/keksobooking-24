@@ -8,7 +8,7 @@ const map = L.map('map')
   .setView({
     lat: 35.67557,
     lng: 139.74747,
-  }, 14);
+  }, 13);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -18,7 +18,7 @@ L.tileLayer(
 ).addTo(map);
 
 const mainMarkerIcon = L.icon({
-  iconUrl: '../img/muffin-grey.svg',
+  iconUrl: 'img/main-pin.svg',
   iconSize: [52, 52],
   iconAnchor: [26, 52],
 });

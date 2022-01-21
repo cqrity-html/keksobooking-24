@@ -1,4 +1,5 @@
 import './api.js';
+import './avatar.js';
 import './form.js';
 import './map.js';
 import './messages.js';
