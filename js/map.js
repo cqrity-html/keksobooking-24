@@ -1,15 +1,5 @@
 import { activeState, adFormAddress, resetButton } from './form.js';
 import { createCustomPopup } from './popup.js';
-import { mapFilters } from './form.js';
-import { compareOffers } from './filters.js';
-
-const OFFERS_COUNT = 10;
-
-const typeFilter = mapFilters.querySelector('#housing-type');
-const priceFilter = mapFilters.querySelector('#housing-price');
-const roomsFilter = mapFilters.querySelector('#housing-rooms');
-const guestsFilter = mapFilters.querySelector('#housing-guests');
-const featuresFilters = mapFilters.querySelectorAll('input[name="features"]');
 
 const map = L.map('map')
   .on('load', () => {
@@ -81,17 +71,8 @@ const createMarker = (card) => {
   marker.addTo(markerGroup).bindPopup(createCustomPopup(card));
 };
 
-const addMarkers = (cards) => {
-  console.log(cards);
-  cards
-    .sort(compareOffers)
-    //.slice(0, OFFERS_COUNT)
-    .forEach((card) => createMarker(card));
-  console.log(cards);
-};
-
 const removeMarkers = () => {
   markerGroup.clearLayers();
 };
 
-export { addMarkers, resetMap, typeFilter, priceFilter, roomsFilter, guestsFilter, featuresFilters, removeMarkers };
+export { resetMap, removeMarkers, createMarker };

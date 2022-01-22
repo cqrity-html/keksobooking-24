@@ -8,18 +8,16 @@ import './popup.js';
 import './temp_data.js';
 import './utils.js';
 
+const RERENDER_DELAY = 500;
+
 import { setUserFormSubmit } from './form.js';
-import { addMarkers } from './map.js';
 import { showAlert, showSuccessMessage, showFailMessage } from './messages.js';
 import { getData } from './api.js';
-import { setFeaturesClick, setTypeClick, setPriceClick, setRoomsClick, setGuestsClick } from './filters.js';
+import { setFeaturesClick, setFiltersClick, addMarkers } from './filters.js';
 
 getData((cards) => {
   addMarkers(cards);
-  setFeaturesClick(addMarkers, cards);
-  setRoomsClick(addMarkers, cards);
-  setPriceClick(addMarkers, cards);
-  setTypeClick(addMarkers, cards);
-  setGuestsClick(addMarkers, cards);
+  setFiltersClick(_.debounce(addMarkers, RERENDER_DELAY), cards);
+  setFeaturesClick(_.debounce(addMarkers, RERENDER_DELAY), cards);
 }, showAlert);
 setUserFormSubmit(showSuccessMessage, showFailMessage);
