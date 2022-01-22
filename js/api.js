@@ -1,7 +1,7 @@
-const getData = (onSucess, onFail) =>
+const getData = (onSuccess, onFail) =>
   fetch('https://24.javascript.pages.academy/keksobooking/data')
     .then((response) => response.json())
-    .then((cards) => onSucess(cards))
+    .then((cards) => onSuccess(cards))
     .catch(() => {
       onFail('Не удалось загрузить данные. Попробуйте позже');
     });

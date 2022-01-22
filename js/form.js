@@ -156,4 +156,4 @@ const setUserFormSubmit = (onSuccess, onFail) => {
   });
 };
 
-export { inactiveState, activeState, adFormAddress, setUserFormSubmit, adForm, resetButton };
+export { inactiveState, activeState, adFormAddress, setUserFormSubmit, adForm, resetButton, mapFilters };
