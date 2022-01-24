@@ -14,10 +14,9 @@ const RERENDER_DELAY = 500;
 import { offers } from './db.js';
 import { setUserFormSubmit } from './form.js';
 import { showSuccessMessage, showFailMessage } from './messages.js';
-import { setFeaturesClick, setFiltersClick, addMarkers } from './filters.js';
+import { setFiltersClick, addMarkers } from './filters.js';
 
 addMarkers(offers);
 setFiltersClick(_.debounce(addMarkers, RERENDER_DELAY), offers);
-setFeaturesClick(_.debounce(addMarkers, RERENDER_DELAY), offers);
 
 setUserFormSubmit(showSuccessMessage, showFailMessage);

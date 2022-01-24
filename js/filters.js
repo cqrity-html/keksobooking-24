@@ -9,8 +9,6 @@ const typeFilter = mapFilters.querySelector('#housing-type');
 const priceFilter = mapFilters.querySelector('#housing-price');
 const roomsFilter = mapFilters.querySelector('#housing-rooms');
 const guestsFilter = mapFilters.querySelector('#housing-guests');
-const featuresFilters = mapFilters.querySelectorAll('input[name="features"]');
-
 const wifiFeature = mapFilters.querySelector('#filter-wifi');
 const dishwasherFeature = mapFilters.querySelector('#filter-dishwasher');
 const parkingFeature = mapFilters.querySelector('#filter-parking');
@@ -22,9 +20,15 @@ let typeFilterValue = 'any';
 let priceFilterValue = '';
 let roomsFilterValue = '';
 let guestsFilterValue = '';
+let wifiFilterValue = '';
+let dishwasherFilterValue = '';
+let parkingFilterValue = '';
+let washerFilterValue = '';
+let elevatorFilterValue = '';
+let conditionerFilterValue = '';
 let filteredOffers = [];
 
-const filterCards = (cards, type, price, rooms, guests) => {
+const filterCards = (cards, type, price, rooms, guests, wifi, dishwasher, parking, washer, elevator, conditioner) => {
   let filteredOffersValue = [];
 
   if (type !== 'any') {
@@ -45,6 +49,30 @@ const filterCards = (cards, type, price, rooms, guests) => {
     filteredOffersValue = filteredOffersValue.filter((card) => guests(card));
   }
 
+  if (wifi) {
+    filteredOffersValue = filteredOffersValue.filter((card) => wifi(card));
+  }
+
+  if (dishwasher) {
+    filteredOffersValue = filteredOffersValue.filter((card) => dishwasher(card));
+  }
+
+  if (parking) {
+    filteredOffersValue = filteredOffersValue.filter((card) => parking(card));
+  }
+
+  if (washer) {
+    filteredOffersValue = filteredOffersValue.filter((card) => washer(card));
+  }
+
+  if (elevator) {
+    filteredOffersValue = filteredOffersValue.filter((card) => elevator(card));
+  }
+
+  if (conditioner) {
+    filteredOffersValue = filteredOffersValue.filter((card) => conditioner(card));
+  }
+
   return filteredOffersValue;
 };
 
@@ -52,7 +80,18 @@ const setFiltersClick = (cb, cards) => {
   typeFilter.addEventListener('change', () => {
     typeFilterValue = typeFilter.value;
     removeMarkers();
-    filteredOffers = filterCards(cards, typeFilterValue, priceFilterValue, roomsFilterValue, guestsFilterValue);
+    filteredOffers = filterCards(
+      cards,
+      typeFilterValue,
+      priceFilterValue,
+      roomsFilterValue,
+      guestsFilterValue,
+      wifiFilterValue,
+      dishwasherFilterValue,
+      parkingFilterValue,
+      washerFilterValue,
+      elevatorFilterValue,
+      conditionerFilterValue);
     cb(filteredOffers);
   });
 
@@ -71,7 +110,18 @@ const setFiltersClick = (cb, cards) => {
     }
     removeMarkers();
 
-    filteredOffers = filterCards(cards, typeFilterValue, priceFilterValue, roomsFilterValue, guestsFilterValue);
+    filteredOffers = filterCards(
+      cards,
+      typeFilterValue,
+      priceFilterValue,
+      roomsFilterValue,
+      guestsFilterValue,
+      wifiFilterValue,
+      dishwasherFilterValue,
+      parkingFilterValue,
+      washerFilterValue,
+      elevatorFilterValue,
+      conditionerFilterValue);
     cb(filteredOffers);
   });
 
@@ -91,7 +141,18 @@ const setFiltersClick = (cb, cards) => {
 
     removeMarkers();
 
-    filteredOffers = filterCards(cards, typeFilterValue, priceFilterValue, roomsFilterValue, guestsFilterValue);
+    filteredOffers = filterCards(
+      cards,
+      typeFilterValue,
+      priceFilterValue,
+      roomsFilterValue,
+      guestsFilterValue,
+      wifiFilterValue,
+      dishwasherFilterValue,
+      parkingFilterValue,
+      washerFilterValue,
+      elevatorFilterValue,
+      conditionerFilterValue);
     cb(filteredOffers);
   });
 
@@ -111,23 +172,164 @@ const setFiltersClick = (cb, cards) => {
 
     removeMarkers();
 
-    filteredOffers = filterCards(cards, typeFilterValue, priceFilterValue, roomsFilterValue, guestsFilterValue);
+    filteredOffers = filterCards(
+      cards,
+      typeFilterValue,
+      priceFilterValue,
+      roomsFilterValue,
+      guestsFilterValue,
+      wifiFilterValue,
+      dishwasherFilterValue,
+      parkingFilterValue,
+      washerFilterValue,
+      elevatorFilterValue,
+      conditionerFilterValue);
     cb(filteredOffers);
   });
-};
 
-const setFeaturesClick = (cb, cards) => {
-  for (let i = 0; i < featuresFilters.length; i++) {
-    featuresFilters[i].addEventListener('click', (evt) => {
-      if (featuresFilters[i].checked) {
-        const filterValue = evt.target.value;
-        filteredOffers = cards.filter((card) => featuresFilters[i].checked && card.offer.features && card.offer.features.includes(`${filterValue}`)
-        );
-        removeMarkers();
-        cb(filteredOffers);
-      }
-    });
-  }
+  wifiFeature.addEventListener('change', () => {
+    const isWifi = (offer) => offer.offer.features && offer.offer.features.includes(wifiFeature.value);
+    if (wifiFeature.checked) {
+      wifiFilterValue = isWifi;
+    } else {
+      wifiFilterValue = '';
+    }
+    removeMarkers();
+
+    filteredOffers = filterCards(
+      cards,
+      typeFilterValue,
+      priceFilterValue,
+      roomsFilterValue,
+      guestsFilterValue,
+      wifiFilterValue,
+      dishwasherFilterValue,
+      parkingFilterValue,
+      washerFilterValue,
+      elevatorFilterValue,
+      conditionerFilterValue);
+    cb(filteredOffers);
+  });
+
+  dishwasherFeature.addEventListener('change', () => {
+    const isDishwasher = (offer) => offer.offer.features && offer.offer.features.includes(dishwasherFeature.value);
+    if (dishwasherFeature.checked) {
+      dishwasherFilterValue = isDishwasher;
+    } else {
+      dishwasherFilterValue = '';
+    }
+    removeMarkers();
+
+    filteredOffers = filterCards(
+      cards,
+      typeFilterValue,
+      priceFilterValue,
+      roomsFilterValue,
+      guestsFilterValue,
+      wifiFilterValue,
+      dishwasherFilterValue,
+      parkingFilterValue,
+      washerFilterValue,
+      elevatorFilterValue,
+      conditionerFilterValue);
+    cb(filteredOffers);
+  });
+
+  parkingFeature.addEventListener('change', () => {
+    const isParking = (offer) => offer.offer.features && offer.offer.features.includes(parkingFeature.value);
+    if (parkingFeature.checked) {
+      parkingFilterValue = isParking;
+    } else {
+      parkingFilterValue = '';
+    }
+    removeMarkers();
+
+    filteredOffers = filterCards(
+      cards,
+      typeFilterValue,
+      priceFilterValue,
+      roomsFilterValue,
+      guestsFilterValue,
+      wifiFilterValue,
+      dishwasherFilterValue,
+      parkingFilterValue,
+      washerFilterValue,
+      elevatorFilterValue,
+      conditionerFilterValue);
+    cb(filteredOffers);
+  });
+
+  washerFeature.addEventListener('change', () => {
+    const isWasher = (offer) => offer.offer.features && offer.offer.features.includes(washerFeature.value);
+    if (washerFeature.checked) {
+      washerFilterValue = isWasher;
+    } else {
+      washerFilterValue = '';
+    }
+    removeMarkers();
+
+    filteredOffers = filterCards(
+      cards,
+      typeFilterValue,
+      priceFilterValue,
+      roomsFilterValue,
+      guestsFilterValue,
+      wifiFilterValue,
+      dishwasherFilterValue,
+      parkingFilterValue,
+      washerFilterValue,
+      elevatorFilterValue,
+      conditionerFilterValue);
+    cb(filteredOffers);
+  });
+
+  elevatorFeature.addEventListener('change', () => {
+    const isElevator = (offer) => offer.offer.features && offer.offer.features.includes(elevatorFeature.value);
+    if (elevatorFeature.checked) {
+      elevatorFilterValue = isElevator;
+    } else {
+      elevatorFilterValue = '';
+    }
+    removeMarkers();
+
+    filteredOffers = filterCards(
+      cards,
+      typeFilterValue,
+      priceFilterValue,
+      roomsFilterValue,
+      guestsFilterValue,
+      wifiFilterValue,
+      dishwasherFilterValue,
+      parkingFilterValue,
+      washerFilterValue,
+      elevatorFilterValue,
+      conditionerFilterValue);
+    cb(filteredOffers);
+  });
+
+  conditionerFeature.addEventListener('change', () => {
+    const isConditioner = (offer) => offer.offer.features && offer.offer.features.includes(conditionerFeature.value);
+    if (conditionerFeature.checked) {
+      conditionerFilterValue = isConditioner;
+    } else {
+      conditionerFilterValue = '';
+    }
+    removeMarkers();
+
+    filteredOffers = filterCards(
+      cards,
+      typeFilterValue,
+      priceFilterValue,
+      roomsFilterValue,
+      guestsFilterValue,
+      wifiFilterValue,
+      dishwasherFilterValue,
+      parkingFilterValue,
+      washerFilterValue,
+      elevatorFilterValue,
+      conditionerFilterValue);
+    cb(filteredOffers);
+  });
 };
 
 const getOfferRank = (offer) => {
@@ -145,7 +347,7 @@ const getOfferRank = (offer) => {
   if (offer.offer.guests === guestsFilter.value) {
     rank += 1;
   }
-  if (wifiFeature.checked && offer.offer.features && offer.offer.features.includes(`${wifiFeature.value}`)) {
+  if (wifiFeature.checked && offer.offer.features && offer.offer.features.includes(wifiFeature.value)) {
     rank += 1;
   }
   if (dishwasherFeature.checked && offer.offer.features && offer.offer.features.includes(dishwasherFeature.value)) {
@@ -196,4 +398,4 @@ const addMarkers = (cards) => {
   }
 };
 
-export { setFeaturesClick, setFiltersClick, addMarkers };
+export { /* setFeaturesClick, */ setFiltersClick, addMarkers };
