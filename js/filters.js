@@ -99,15 +99,21 @@ const setFiltersClick = (cb, cards) => {
     const isLowPrice = (offer) => offer.offer.price < MIDDLE;
     const isMiddlePrice = (offer) => offer.offer.price >= MIDDLE && offer.offer.price <= HIGH;
     const isHighPrice = (offer) => offer.offer.price > HIGH;
-    if (priceFilter.value === 'low') {
-      priceFilterValue = isLowPrice;
-    } else if (priceFilter.value === 'middle') {
-      priceFilterValue = isMiddlePrice;
-    } else if (priceFilter.value === 'high') {
-      priceFilterValue = isHighPrice;
-    } else {
-      priceFilterValue = '';
+
+    switch (priceFilter.value) {
+      case 'low':
+        priceFilterValue = isLowPrice;
+        break;
+      case 'middle':
+        priceFilterValue = isMiddlePrice;
+        break;
+      case 'high':
+        priceFilterValue = isHighPrice;
+        break;
+      default:
+        priceFilterValue = '';
     }
+
     removeMarkers();
 
     filteredOffers = filterCards(
@@ -129,14 +135,19 @@ const setFiltersClick = (cb, cards) => {
     const isOneRoom = (offer) => offer.offer.rooms === '1';
     const isTwoRooms = (offer) => offer.offer.rooms === '2';
     const isThreeRooms = (offer) => offer.offer.rooms === '3';
-    if (roomsFilter.value === '1') {
-      roomsFilterValue = isOneRoom;
-    } else if (roomsFilter.value === '2') {
-      roomsFilterValue = isTwoRooms;
-    } else if (roomsFilter.value === '3') {
-      roomsFilterValue = isThreeRooms;
-    } else {
-      roomsFilterValue = '';
+
+    switch (roomsFilter.value) {
+      case '1':
+        roomsFilterValue = isOneRoom;
+        break;
+      case '2':
+        roomsFilterValue = isTwoRooms;
+        break;
+      case '3':
+        roomsFilterValue = isThreeRooms;
+        break;
+      default:
+        roomsFilterValue = '';
     }
 
     removeMarkers();
@@ -160,14 +171,19 @@ const setFiltersClick = (cb, cards) => {
     const isOneGuest = (offer) => offer.offer.guests === '1';
     const isTwoGuests = (offer) => offer.offer.guests === '2';
     const isThreeGuests = (offer) => offer.offer.guests === '3';
-    if (guestsFilter.value === '1') {
-      guestsFilterValue = isOneGuest;
-    } else if (guestsFilter.value === '2') {
-      guestsFilterValue = isTwoGuests;
-    } else if (guestsFilter.value === '3') {
-      guestsFilterValue = isThreeGuests;
-    } else {
-      guestsFilterValue = '';
+
+    switch (guestsFilter.value) {
+      case '1':
+        guestsFilterValue = isOneGuest;
+        break;
+      case '2':
+        guestsFilterValue = isTwoGuests;
+        break;
+      case '3':
+        guestsFilterValue = isThreeGuests;
+        break;
+      default:
+        roomsFilterValue = '';
     }
 
     removeMarkers();
@@ -335,34 +351,22 @@ const setFiltersClick = (cb, cards) => {
 const getOfferRank = (offer) => {
   let rank = 0;
 
-  if (offer.offer.type === typeFilter.value) {
+  if (offer.offer.features && offer.offer.features.includes(wifiFeature.value)) {
     rank += 1;
   }
-  if (offer.offer.price === priceFilter.value) {
+  if (offer.offer.features && offer.offer.features.includes(dishwasherFeature.value)) {
     rank += 1;
   }
-  if (offer.offer.rooms === roomsFilter.value) {
+  if (offer.offer.features && offer.offer.features.includes(parkingFeature.value)) {
     rank += 1;
   }
-  if (offer.offer.guests === guestsFilter.value) {
+  if (offer.offer.features && offer.offer.features.includes(washerFeature.value)) {
     rank += 1;
   }
-  if (wifiFeature.checked && offer.offer.features && offer.offer.features.includes(wifiFeature.value)) {
+  if (offer.offer.features && offer.offer.features.includes(elevatorFeature.value)) {
     rank += 1;
   }
-  if (dishwasherFeature.checked && offer.offer.features && offer.offer.features.includes(dishwasherFeature.value)) {
-    rank += 1;
-  }
-  if (parkingFeature.checked && offer.offer.features && offer.offer.features.includes(parkingFeature.value)) {
-    rank += 1;
-  }
-  if (washerFeature.checked && offer.offer.features && offer.offer.features.includes(washerFeature.value)) {
-    rank += 1;
-  }
-  if (elevatorFeature.checked && offer.offer.features && offer.offer.features.includes(elevatorFeature.value)) {
-    rank += 1;
-  }
-  if (conditionerFeature.checked && offer.offer.features && offer.offer.features.includes(conditionerFeature.value)) {
+  if (offer.offer.features && offer.offer.features.includes(conditionerFeature.value)) {
     rank += 1;
   }
 
@@ -376,20 +380,9 @@ const compareOffers = (offerA, offerB) => {
   return rankB - rankA;
 };
 
-const isFeatureChanged = (offer) => (
-  (offer.offer.features && (
-    (wifiFeature.checked && offer.offer.features.includes(`${wifiFeature.value}`))
-    || (dishwasherFeature.checked && offer.offer.features.includes(`${dishwasherFeature.value}`))
-    || (parkingFeature.checked && offer.offer.features.includes(`${parkingFeature.value}`))
-    || (washerFeature.checked && offer.offer.features.includes(`${wifiFeature.value}`))
-    || (elevatorFeature.checked && offer.offer.features.includes(`${wifiFeature.value}`))
-    || (conditionerFeature.checked && offer.offer.features.includes(`${wifiFeature.value}`))))
-);
-
 const addMarkers = (cards) => {
   if (wifiFeature.checked || dishwasherFeature.checked || parkingFeature.checked || washerFeature.checked || elevatorFeature.checked || conditionerFeature.checked) {
     cards
-      .filter(isFeatureChanged)
       .sort(compareOffers)
       .slice(0, OFFERS_COUNT)
       .forEach((card) => createMarker(card));
@@ -398,4 +391,4 @@ const addMarkers = (cards) => {
   }
 };
 
-export { /* setFeaturesClick, */ setFiltersClick, addMarkers };
+export { setFiltersClick, addMarkers };
