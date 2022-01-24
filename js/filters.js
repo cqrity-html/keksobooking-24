@@ -11,62 +11,107 @@ const roomsFilter = mapFilters.querySelector('#housing-rooms');
 const guestsFilter = mapFilters.querySelector('#housing-guests');
 const featuresFilters = mapFilters.querySelectorAll('input[name="features"]');
 
-const isFilterAny = (currentFilter) => currentFilter.value === 'any';
+const wifiFeature = mapFilters.querySelector('#filter-wifi');
+const dishwasherFeature = mapFilters.querySelector('#filter-dishwasher');
+const parkingFeature = mapFilters.querySelector('#filter-parking');
+const washerFeature = mapFilters.querySelector('#filter-washer');
+const elevatorFeature = mapFilters.querySelector('#filter-elevator');
+const conditionerFeature = mapFilters.querySelector('#filter-conditioner');
 
+let typeFilterValue = 'any';
+let priceFilterValue = '';
+let roomsFilterValue = '';
+let guestsFilterValue = '';
 let filteredOffers = [];
 
-const setFiltersClick = (cb, cards) => {
+const filterCards = (cards, type, price, rooms, guests) => {
+  let filteredOffersValue = [];
 
+  if (type !== 'any') {
+    filteredOffersValue = cards.filter((card) => card.offer.type === type);
+  } else {
+    filteredOffersValue = cards;
+  }
+
+  if (price) {
+    filteredOffersValue = filteredOffersValue.filter((card) => price(card));
+  }
+
+  if (rooms) {
+    filteredOffersValue = filteredOffersValue.filter((card) => rooms(card));
+  }
+
+  if (guests) {
+    filteredOffersValue = filteredOffersValue.filter((card) => guests(card));
+  }
+
+  return filteredOffersValue;
+};
+
+const setFiltersClick = (cb, cards) => {
   typeFilter.addEventListener('change', () => {
+    typeFilterValue = typeFilter.value;
     removeMarkers();
-    cb(cards);
+    filteredOffers = filterCards(cards, typeFilterValue, priceFilterValue, roomsFilterValue, guestsFilterValue);
+    cb(filteredOffers);
   });
 
-  priceFilter.addEventListener('change', (evt) => {
-    const filterValue = evt.target.value;
+  priceFilter.addEventListener('change', () => {
     const isLowPrice = (offer) => offer.offer.price < MIDDLE;
     const isMiddlePrice = (offer) => offer.offer.price >= MIDDLE && offer.offer.price <= HIGH;
     const isHighPrice = (offer) => offer.offer.price > HIGH;
-    if (filterValue === 'low') {
-      filteredOffers = cards.filter(isLowPrice);
-    } else if (filterValue === 'middle') {
-      filteredOffers = cards.filter(isMiddlePrice);
-    } else if (filterValue === 'high') {
-      filteredOffers = cards.filter(isHighPrice);
+    if (priceFilter.value === 'low') {
+      priceFilterValue = isLowPrice;
+    } else if (priceFilter.value === 'middle') {
+      priceFilterValue = isMiddlePrice;
+    } else if (priceFilter.value === 'high') {
+      priceFilterValue = isHighPrice;
     } else {
-      filteredOffers = cards;
+      priceFilterValue = '';
     }
     removeMarkers();
+
+    filteredOffers = filterCards(cards, typeFilterValue, priceFilterValue, roomsFilterValue, guestsFilterValue);
     cb(filteredOffers);
   });
 
-  roomsFilter.addEventListener('change', (evt) => {
-    const filterValue = evt.target.value;
-    const isManyRooms = (offer) => offer.offer.rooms >= 4 && offer.offer.rooms === filterValue;
-    const isFewRooms = (offer) => offer.offer.rooms < 4 && offer.offer.rooms === filterValue;
-    if (filterValue < 4) {
-      filteredOffers = cards.filter(isFewRooms);
-    } else if (filterValue === 4) {
-      filteredOffers = cards.filter(isManyRooms);
+  roomsFilter.addEventListener('change', () => {
+    const isOneRoom = (offer) => offer.offer.rooms === '1';
+    const isTwoRooms = (offer) => offer.offer.rooms === '2';
+    const isThreeRooms = (offer) => offer.offer.rooms === '3';
+    if (roomsFilter.value === '1') {
+      roomsFilterValue = isOneRoom;
+    } else if (roomsFilter.value === '2') {
+      roomsFilterValue = isTwoRooms;
+    } else if (roomsFilter.value === '3') {
+      roomsFilterValue = isThreeRooms;
     } else {
-      filteredOffers = cards;
+      roomsFilterValue = '';
     }
+
     removeMarkers();
+
+    filteredOffers = filterCards(cards, typeFilterValue, priceFilterValue, roomsFilterValue, guestsFilterValue);
     cb(filteredOffers);
   });
 
-  guestsFilter.addEventListener('change', (evt) => {
-    const filterValue = evt.target.value;
-    const isManyGuests = (offer) => offer.offer.guests >= 3 && offer.offer.rooms === filterValue;
-    const isFewGuests = (offer) => offer.offer.guests < 3 && offer.offer.rooms === filterValue;
-    if (filterValue < 3) {
-      filteredOffers = cards.filter(isFewGuests);
-    } else if (filterValue === 3) {
-      filteredOffers = cards.filter(isManyGuests);
+  guestsFilter.addEventListener('change', () => {
+    const isOneGuest = (offer) => offer.offer.guests === '1';
+    const isTwoGuests = (offer) => offer.offer.guests === '2';
+    const isThreeGuests = (offer) => offer.offer.guests === '3';
+    if (guestsFilter.value === '1') {
+      guestsFilterValue = isOneGuest;
+    } else if (guestsFilter.value === '2') {
+      guestsFilterValue = isTwoGuests;
+    } else if (guestsFilter.value === '3') {
+      guestsFilterValue = isThreeGuests;
     } else {
-      filteredOffers = cards;
+      guestsFilterValue = '';
     }
+
     removeMarkers();
+
+    filteredOffers = filterCards(cards, typeFilterValue, priceFilterValue, roomsFilterValue, guestsFilterValue);
     cb(filteredOffers);
   });
 };
@@ -80,25 +125,12 @@ const setFeaturesClick = (cb, cards) => {
         );
         removeMarkers();
         cb(filteredOffers);
-      } else {
-        const filterValue = evt.target.value;
-        filteredOffers = cards.filter((card) => !featuresFilters[i].checked && card.offer.features && !card.offer.features.includes(`${filterValue}`)
-        );
-        removeMarkers();
-        cb(filteredOffers);
       }
     });
   }
 };
 
 const getOfferRank = (offer) => {
-  const wifiFeature = mapFilters.querySelector('#filter-wifi');
-  const dishwasherFeature = mapFilters.querySelector('#filter-dishwasher');
-  const parkingFeature = mapFilters.querySelector('#filter-parking');
-  const washerFeature = mapFilters.querySelector('#filter-washer');
-  const elevatorFeature = mapFilters.querySelector('#filter-elevator');
-  const conditionerFeature = mapFilters.querySelector('#filter-conditioner');
-
   let rank = 0;
 
   if (offer.offer.type === typeFilter.value) {
@@ -142,23 +174,25 @@ const compareOffers = (offerA, offerB) => {
   return rankB - rankA;
 };
 
-const isTypeChanged = (offer) => {
-  if (!isFilterAny(typeFilter)) {
-    return typeFilter.value === offer.offer.type;
-  }
-};
+const isFeatureChanged = (offer) => (
+  (offer.offer.features && (
+    (wifiFeature.checked && offer.offer.features.includes(`${wifiFeature.value}`))
+    || (dishwasherFeature.checked && offer.offer.features.includes(`${dishwasherFeature.value}`))
+    || (parkingFeature.checked && offer.offer.features.includes(`${parkingFeature.value}`))
+    || (washerFeature.checked && offer.offer.features.includes(`${wifiFeature.value}`))
+    || (elevatorFeature.checked && offer.offer.features.includes(`${wifiFeature.value}`))
+    || (conditionerFeature.checked && offer.offer.features.includes(`${wifiFeature.value}`))))
+);
 
 const addMarkers = (cards) => {
-  if (isFilterAny(typeFilter) && isFilterAny(priceFilter) && isFilterAny(roomsFilter) && isFilterAny(guestsFilter)) {
+  if (wifiFeature.checked || dishwasherFeature.checked || parkingFeature.checked || washerFeature.checked || elevatorFeature.checked || conditionerFeature.checked) {
+    cards
+      .filter(isFeatureChanged)
+      .sort(compareOffers)
+      .slice(0, OFFERS_COUNT)
+      .forEach((card) => createMarker(card));
+  } else {
     cards.slice(0, OFFERS_COUNT).forEach((card) => createMarker(card));
-  } else if (!isFilterAny(typeFilter)) {
-    cards.slice().filter(isTypeChanged).sort(compareOffers).slice(0, OFFERS_COUNT).forEach((card) => createMarker(card));
-  } else if (!isFilterAny(priceFilter)) {
-    cards.slice().sort(compareOffers).slice(0, OFFERS_COUNT).forEach((card) => createMarker(card));
-  } else if (!isFilterAny(roomsFilter)) {
-    cards.slice().sort(compareOffers).slice(0, OFFERS_COUNT).forEach((card) => createMarker(card));
-  } else if (!isFilterAny(guestsFilter)) {
-    cards.slice().sort(compareOffers).slice(0, OFFERS_COUNT).forEach((card) => createMarker(card));
   }
 };
 

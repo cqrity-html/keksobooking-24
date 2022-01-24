@@ -1,5 +1,6 @@
 import './api.js';
 import './avatar.js';
+import './db.js';
 import './filters.js';
 import './form.js';
 import './map.js';
@@ -10,14 +11,13 @@ import './utils.js';
 
 const RERENDER_DELAY = 500;
 
+import { offers } from './db.js';
 import { setUserFormSubmit } from './form.js';
-import { showAlert, showSuccessMessage, showFailMessage } from './messages.js';
-import { getData } from './api.js';
+import { showSuccessMessage, showFailMessage } from './messages.js';
 import { setFeaturesClick, setFiltersClick, addMarkers } from './filters.js';
 
-getData((cards) => {
-  addMarkers(cards);
-  setFiltersClick(_.debounce(addMarkers, RERENDER_DELAY), cards);
-  setFeaturesClick(_.debounce(addMarkers, RERENDER_DELAY), cards);
-}, showAlert);
+addMarkers(offers);
+setFiltersClick(_.debounce(addMarkers, RERENDER_DELAY), offers);
+setFeaturesClick(_.debounce(addMarkers, RERENDER_DELAY), offers);
+
 setUserFormSubmit(showSuccessMessage, showFailMessage);

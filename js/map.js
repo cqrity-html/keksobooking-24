@@ -58,6 +58,10 @@ resetButton.addEventListener('click', resetMap);
 
 const markerGroup = L.layerGroup().addTo(map);
 
+const removeMarkers = () => {
+  markerGroup.clearLayers();
+};
+
 const createMarker = (card) => {
   const lat = card.location.lat;
   const lng = card.location.lng;
@@ -67,12 +71,7 @@ const createMarker = (card) => {
     iconAnchor: [26, 52],
   });
   const marker = L.marker({ lat, lng }, { icon: markerIcon });
-
   marker.addTo(markerGroup).bindPopup(createCustomPopup(card));
 };
 
-const removeMarkers = () => {
-  markerGroup.clearLayers();
-};
-
-export { resetMap, removeMarkers, createMarker };
+export { resetMap, removeMarkers, createMarker, markerGroup };

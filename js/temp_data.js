@@ -54,4 +54,71 @@ function createOffer() {
 
 const tempData = Array.from({ length: OFFERS_QUANTITY }, createOffer);
 
-export { tempData };
+const examples = [
+  {
+    author: {
+      avatar: `img/avatars/user${generatePhotoId()}.png`,
+    },
+    location: {
+      lat: getRandomPositiveFloat(35.65000, 35.70000, 5),
+      lng: getRandomPositiveFloat(139.70000, 139.80000, 5),
+    },
+    offer: {
+      price: 5000,
+      type: 'flat',
+      rooms: 4,
+      guests: 6,
+      features: ['wifi', 'dishwasher', 'parking'],
+    },
+  },
+  {
+    author: {
+      avatar: `img/avatars/user${generatePhotoId()}.png`,
+    },
+    location: {
+      lat: getRandomPositiveFloat(35.65000, 35.70000, 5),
+      lng: getRandomPositiveFloat(139.70000, 139.80000, 5),
+    },
+    offer: {
+      price: 10000,
+      type: 'flat',
+      rooms: 7,
+      guests: 6,
+      features: ['washer', 'elevator', 'conditioner'],
+    },
+  },
+  {
+    author: {
+      avatar: `img/avatars/user${generatePhotoId()}.png`,
+    },
+    location: {
+      lat: getRandomPositiveFloat(35.65000, 35.70000, 5),
+      lng: getRandomPositiveFloat(139.70000, 139.80000, 5),
+    },
+    offer: {
+      price: 50000,
+      type: 'hotel',
+      rooms: 8,
+      guests: 10,
+      features: ['wifi', 'dishwasher', 'elevator', 'conditioner'],
+    },
+  },
+  {
+    author: {
+      avatar: `img/avatars/user${generatePhotoId()}.png`,
+    },
+    location: {
+      lat: getRandomPositiveFloat(35.65000, 35.70000, 5),
+      lng: getRandomPositiveFloat(139.70000, 139.80000, 5),
+    },
+    offer: {
+      price: 60000,
+      type: 'hotel',
+      rooms: 10,
+      guests: 10,
+      features: ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'],
+    },
+  },
+];
+
+export { tempData, examples };
